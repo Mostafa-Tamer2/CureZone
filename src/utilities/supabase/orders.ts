@@ -55,7 +55,7 @@ export async function getUserOrders(): Promise<Order[]> {
       return [];
     }
 
-    return orders || [];
+    return (orders ?? []) as unknown as Order[];
   } catch (err) {
     console.error("Unexpected error in getUserOrders:", err);
     return [];
@@ -100,7 +100,7 @@ export async function getOrderDetails(orderId: number): Promise<Order | null> {
 
     if (itemsError) {
       console.error("Error fetching order items:", itemsError);
-      return order;
+      return order as unknown as Order;
     }
 
     // Get product details for each item
@@ -115,8 +115,9 @@ export async function getOrderDetails(orderId: number): Promise<Order | null> {
         console.error("Error fetching products for order:", productsError);
       } else if (products) {
         // Add product details to each order item
+        const prodRows: any[] = (products as unknown as any[]) ?? [];
         const itemsWithProducts = orderItems.map((item) => {
-          const product = products.find((p) => p.id === item.product_id);
+          const product = prodRows.find((p) => p.id === item.product_id);
           return {
             ...item,
             product: product
@@ -127,14 +128,14 @@ export async function getOrderDetails(orderId: number): Promise<Order | null> {
               : undefined,
           };
         });
-
-        order.items = itemsWithProducts;
+        (order as unknown as Order).items =
+          itemsWithProducts as unknown as OrderItem[];
       }
     } else {
-      order.items = [];
+      (order as unknown as Order).items = [];
     }
 
-    return order;
+    return order as unknown as Order;
   } catch (err) {
     console.error("Unexpected error in getOrderDetails:", err);
     return null;
