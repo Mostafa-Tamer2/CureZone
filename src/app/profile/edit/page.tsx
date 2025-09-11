@@ -58,9 +58,21 @@ export default function EditProfilePage() {
             toast.error("Failed to load profile");
           } else if (data) {
             setProfile(data as UserProfile);
-            setFullName(data.full_name || "");
-            setPhone(data.phone || "");
-            setAddress(data.address || "");
+            setFullName(
+              typeof data.full_name === "string" && data.full_name.trim()
+                ? data.full_name
+                : ""
+            );
+            setPhone(
+              typeof data.phone === "string" && data.phone.trim()
+                ? data.phone
+                : ""
+            );
+            setAddress(
+              typeof data.address === "string" && data.address.trim()
+                ? data.address
+                : ""
+            );
           }
         } catch (error) {
           console.error("Error in profile fetch:", error);
