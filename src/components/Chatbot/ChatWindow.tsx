@@ -3,18 +3,29 @@
 import React, { useState, useRef, useEffect } from "react";
 import ChatInputForm from "./ChatInputForm";
 import ChatMessage from "./ChatMessage";
-import { ShieldPlusIcon, Sparkles} from "lucide-react";
+import { ShieldPlusIcon, Sparkles } from "lucide-react";
 
 export default function ChatWindow() {
-  const [chatHistory, setChatHistory] = useState([]);
-  const chatScroll = useRef();
+  type ChatRole = "user" | "model";
+  interface ChatMessage {
+    role: ChatRole;
+    text: string;
+    timestamp: string;
+  }
+
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const chatScroll = useRef<HTMLDivElement | null>(null);
 
   // BotResponse for FastAPI backend
-  const BotResponse = async (history) => {
-    const updateHistory = (text) => {
+  const BotResponse = async (history: ChatMessage[]) => {
+    const updateHistory = (text: string) => {
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       setChatHistory((prev) => [
         ...prev.filter((msg) => msg.text !== "Answering..."),
-        { role: "model", text },
+        { role: "model", text, timestamp },
       ]);
     };
 
@@ -42,10 +53,12 @@ export default function ChatWindow() {
 
   useEffect(() => {
     // Auto-scroll to bottom
-    chatScroll.current.scrollTo({
-      top: chatScroll.current.scrollHeight,
-      behavior: "smooth",
-    });
+    if (chatScroll.current) {
+      chatScroll.current.scrollTo({
+        top: chatScroll.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [chatHistory]);
 
   return (
