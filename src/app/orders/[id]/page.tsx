@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import {
   Package,
   Clock,
@@ -26,16 +26,10 @@ import {
 } from "@/utilities/supabase/orders";
 import toast from "react-hot-toast";
 
-
-interface OrderPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function OrderDetailsPage({ params }: OrderPageProps) {
+export default function OrderDetailsPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const params = useParams<{ id: string }>();
   const [order, setOrder] = useState<Order | null>(null);
   const [loadingOrder, setLoadingOrder] = useState(true);
 
