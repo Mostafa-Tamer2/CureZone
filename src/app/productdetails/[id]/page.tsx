@@ -10,18 +10,38 @@ import Link from "next/link";
 import { ArrowLeft, Share2, Shield, Truck, RotateCcw } from "lucide-react";
 
 // Define the page props interface
+// interface ProductPageProps {
+//   params: Promise<{
+//     id: string;
+//   }>;
+// }
 interface ProductPageProps {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   // Await params first (Next.js 15 requirement)
-  const { id } = await params;
+  // const { id } = await params;
 
-  // Convert the ID from string to number
-  const productId = parseInt(id, 10);
+  // // Convert the ID from string to number
+  // const productId = parseInt(id, 10);
+
+  // // Validate ID
+  // if (isNaN(productId)) {
+  //   notFound();
+  // }
+
+  // // Fetch the product details
+  // const product = await getProductById(productId);
+
+  // // If product not found, show 404
+  // if (!product) {
+  //   notFound();
+  // }
+
+   const productId = parseInt(params.id, 10);
 
   // Validate ID
   if (isNaN(productId)) {
@@ -31,7 +51,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Fetch the product details
   const product = await getProductById(productId);
 
-  // If product not found, show 404
   if (!product) {
     notFound();
   }
