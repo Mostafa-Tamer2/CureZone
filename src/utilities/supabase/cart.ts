@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import type { Product } from "@/types/product";
+import type { Product, Category } from "@/types/product";
 
 // Define the cart item type
 export interface CartItem {
@@ -82,7 +82,7 @@ export async function addToCart(product: Product, quantity: number = 1) {
       .select("id, quantity")
       .eq("user_id", user.id)
       .eq("product_id", product.id)
-      .single();
+      .single<{ id: number; quantity: number }>();
 
     if (existingItem) {
       // Update quantity if item already exists
@@ -272,7 +272,10 @@ export async function getCartItems(): Promise<CartItem[]> {
       }
 
       // Get the product details for all cart items
-      const productIds = cartItems.map((item) => item.product_id);
+      type CartRow = { product_id: number; quantity: number };
+      const cartRows: CartRow[] = (cartItems as unknown as CartRow[]) ?? [];
+
+      const productIds = cartRows.map((item) => item.product_id);
       const { data: products, error: productsError } = await supabase
         .from("products")
         .select("*, categories(*)")
@@ -284,16 +287,52 @@ export async function getCartItems(): Promise<CartItem[]> {
       }
 
       // Combine the cart items with their product details
-      return cartItems.map((cartItem) => {
-        const product = products.find((p) => p.id === cartItem.product_id);
-        return {
-          product: {
-            ...product,
-            category: product.categories,
-          },
-          quantity: cartItem.quantity,
-        };
-      });
+      type ProductRow = {
+        id: number;
+        name: string;
+        image_url: string;
+        description: string;
+        price: number;
+        stock_quantity: number;
+        status: string;
+        discount_percent: number | null;
+        category_id: number;
+        categories: Category;
+      };
+
+      const productRows: ProductRow[] =
+        (products as unknown as ProductRow[]) ?? [];
+
+      const combined: CartItem[] = cartRows
+        .map((cartItem) => {
+          const prod: ProductRow | undefined = productRows.find(
+            (p) => p.id === cartItem.product_id
+          );
+          if (!prod) {
+            return null;
+          }
+
+          const product: Product = {
+            id: prod.id,
+            name: prod.name,
+            image_url: prod.image_url,
+            description: prod.description,
+            price: prod.price,
+            stock_quantity: prod.stock_quantity,
+            status: prod.status,
+            discount_percent: prod.discount_percent,
+            category_id: prod.category_id,
+            category: prod.categories,
+          };
+
+          return {
+            product,
+            quantity: Number(cartItem.quantity) || 0,
+          } as CartItem;
+        })
+        .filter((v): v is CartItem => v !== null);
+
+      return combined;
     } else {
       // Guest user: Get from localStorage
       return getGuestCart();
@@ -349,13 +388,13 @@ export async function getCartItemQuantity(productId: number): Promise<number> {
       .select("quantity")
       .eq("user_id", user.id)
       .eq("product_id", productId)
-      .single();
+      .single<{ quantity: number }>();
 
     if (error && error.code !== "PGRST116") {
       console.error("Error getting cart item quantity:", error);
     }
 
-    return data?.quantity || 0;
+    return typeof data?.quantity === "number" ? data.quantity : 0;
   } else {
     // Guest user: Get from localStorage
     const guestCart = getGuestCart();
@@ -384,7 +423,14 @@ export async function getCartCount(): Promise<number> {
       return 0;
     }
 
-    return data.reduce((total, item) => total + item.quantity, 0);
+    const rows: { quantity: number }[] =
+      (data as unknown as {
+        quantity: number;
+      }[]) ?? [];
+    return rows.reduce(
+      (total, item) => total + (Number(item.quantity) || 0),
+      0
+    );
   } else {
     // Guest user: Calculate from localStorage
     const guestCart = getGuestCart();
@@ -413,7 +459,7 @@ export async function migrateGuestCart(): Promise<void> {
       .select("id, quantity")
       .eq("user_id", user.id)
       .eq("product_id", item.product.id)
-      .single();
+      .single<{ id: number; quantity: number }>();
 
     if (existingItem) {
       // Update quantity if item already exists
