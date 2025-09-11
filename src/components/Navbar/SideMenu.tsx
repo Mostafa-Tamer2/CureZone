@@ -57,7 +57,7 @@ const SideMenu: FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const navItemVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: (i) => ({
+    visible: (i: number) => ({
       opacity: 1,
       x: 0,
       transition: {
@@ -74,7 +74,9 @@ const SideMenu: FC<SidebarProps> = ({ isOpen, onClose }) => {
       exit="hidden"
       variants={backdropVariants}
       style={{ zIndex: 99999 }} // Inline style for max z-index
-      className={`fixed inset-0 bg-black/40 backdrop-blur-sm flex ${!isOpen ? "pointer-events-none" : ""}`}
+      className={`fixed inset-0 bg-black/40 backdrop-blur-sm flex ${
+        !isOpen ? "pointer-events-none" : ""
+      }`}
     >
       <motion.div
         ref={sidebarRef}
