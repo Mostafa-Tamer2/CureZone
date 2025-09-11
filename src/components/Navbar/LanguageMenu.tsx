@@ -8,13 +8,13 @@ export default function LanguageMenu({}: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Store the currently selected language code
-  const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const [selectedLanguage, setSelectedLanguage] = useState<"EN" | "AR">("EN");
 
   // Language options
   const languages = [
     { code: "EN", name: "English" },
     { code: "AR", name: "العربية" },
-  ];
+  ] as const;
 
   // Toggle the dropdown visibility
   const toggleDropdown = () => {
@@ -22,7 +22,7 @@ export default function LanguageMenu({}: Props) {
   };
 
   // Handle language selection
-  const selectLanguage = (code) => {
+  const selectLanguage = (code: (typeof languages)[number]["code"]) => {
     setSelectedLanguage(code);
     setIsOpen(false);
   };
