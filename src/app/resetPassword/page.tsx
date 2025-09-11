@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/utilities/supabase/client";
 import { updateUserPassword } from "@/utilities/supabase/user";
-import { useAuth } from "@/lib/auth-context";
+// import { useAuth } from "@/lib/auth-context";
 
 export default function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   //   useEffect(() => {
   //     if (!user) {
@@ -39,8 +39,12 @@ export default function ResetPasswordPage() {
       await updateUserPassword(newPassword);
       toast.success("Password reset successfully!");
       router.push("/");
-    } catch (err: any) {
-      toast.error(err.message || "Password reset failed.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Password reset failed.");
+      }
     }
   };
 

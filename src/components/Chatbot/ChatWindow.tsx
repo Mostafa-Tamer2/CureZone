@@ -1,10 +1,9 @@
-// @ts-nocheck
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import ChatInputForm from "./ChatInputForm";
 import ChatMessage from "./ChatMessage";
-import { ShieldPlusIcon, MessageCircle, Sparkles, Send } from "lucide-react";
+import { ShieldPlusIcon, Sparkles} from "lucide-react";
 
 export default function ChatWindow() {
   const [chatHistory, setChatHistory] = useState([]);
@@ -90,7 +89,7 @@ export default function ChatWindow() {
             </div>
             <div className="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border border-gray-200 bg-white rounded-lg rounded-tl-none">
               <p className="text-sm font-normal text-gray-700">
-                Hello! I'm DocWise, your personal health assistant. How can I
+                Hello! Iam DocWise, your personal health assistant. How can I
                 help you today?
               </p>
             </div>

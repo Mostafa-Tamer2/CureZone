@@ -80,6 +80,7 @@ export default function ProfilePage() {
       toast.success("Signed out successfully");
       router.push("/");
     } catch (error) {
+      console.error("Sign out failed:", error);
       toast.error("Error signing out");
     }
   };

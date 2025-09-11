@@ -60,7 +60,13 @@ const Signup = () => {
           error?.message || "Error creating account. Please try again."
         );
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Caught error:", error.message);
+      } else {
+        console.error("Caught unexpected error:", error);
+      }
+
       setErrorMessage("An unexpected error occurred. Please try again.");
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
@@ -71,8 +77,15 @@ const Signup = () => {
   const handleGoogleSignUp = async () => {
     try {
       await signInWithGoogle();
-    } catch (error) {
-      toast.error("Error signing up with Google. Please try again.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Caught error:", error.message);
+      } else {
+        console.error("Caught unexpected error:", error);
+      }
+
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 

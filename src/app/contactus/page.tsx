@@ -56,6 +56,7 @@ const ContactUs: React.FC = () => {
         inquiryType: "general",
       });
     } catch (error) {
+      console.error("Form submission failed:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -264,7 +265,7 @@ const ContactUs: React.FC = () => {
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-800">
                     <p className="font-medium">Message sent successfully!</p>
                     <p className="text-sm">
-                      We'll get back to you within 24 hours.
+                      We will get back to you within 24 hours.
                     </p>
                   </div>
                 )}

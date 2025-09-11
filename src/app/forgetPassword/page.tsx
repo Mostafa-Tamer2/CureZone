@@ -29,6 +29,7 @@ export default function ForgotPasswordPage() {
         }, 2000);
       }
     } catch (error) {
+      console.error("Reset password error:", error);
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -68,7 +69,7 @@ export default function ForgotPasswordPage() {
             Forgot Password?
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed">
-            No worries! Enter your email and we'll send you a reset link.
+            No worries! Enter your email and we will send you a reset link.
           </p>
         </div>
 
@@ -194,7 +195,7 @@ export default function ForgotPasswordPage() {
           <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
             <h3 className="font-semibold text-gray-800 mb-2">Need Help?</h3>
             <p className="text-sm text-gray-600 leading-relaxed">
-              Didn't receive the email? Check your spam folder or contact
+              Didnt receive the email? Check your spam folder or contact
               support if the issue persists.
             </p>
             <button

@@ -46,7 +46,7 @@ const SignIn = () => {
         setErrorMessage(signInError?.message || "Invalid email or password");
         toast.error(signInError?.message || "Invalid email or password");
       }
-    } catch (_) {
+    } catch {
       setErrorMessage("An unexpected error occurred. Please try again.");
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
@@ -57,8 +57,9 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle(redirectPath);
-    } catch (_) {
-      toast.error("Error signing in with Google. Please try again.");
+    } catch {
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
