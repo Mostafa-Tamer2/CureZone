@@ -26,7 +26,14 @@ import {
 } from "@/utilities/supabase/orders";
 import toast from "react-hot-toast";
 
-export default function OrderDetailsPage({params,}: {params: { id: string };}) {
+
+interface OrderPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function OrderDetailsPage({ params }: OrderPageProps) {
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [order, setOrder] = useState<Order | null>(null);
