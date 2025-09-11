@@ -2,11 +2,11 @@ import React from "react";
 import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface LogoProps {
-  className?: string;
-}
+// interface LogoProps {
+//   className?: string;
+// }
 
-export default function Logo({ className }: LogoProps) {
+export default function Logo() {
   return (
     <Link href="/" className="relative h-24 w-[200px]">
       <img

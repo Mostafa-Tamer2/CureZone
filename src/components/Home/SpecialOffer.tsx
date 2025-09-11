@@ -1,7 +1,6 @@
-import { ArrowRightIcon, BadgePercent, ShoppingBag } from "lucide-react";
-import React, { useState } from "react";
+import { BadgePercent } from "lucide-react";
+// import React, { useState } from "react";
 import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 
@@ -9,8 +8,8 @@ import { motion } from "framer-motion";
 type Props = {};
 
 export default function SpecialOffer({}: Props) {
-  const [hovered1, setHovered1] = useState(false);
-  const [hovered2, setHovered2] = useState(false);
+  // const [_, setHovered1] = useState(false);
+  // const [__, setHovered2] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center w-full py-16 px-4">
@@ -30,7 +29,7 @@ export default function SpecialOffer({}: Props) {
       </div>
 
       <p className="text-gray-600 max-w-md text-center mb-10">
-        Limited time deals on our premium health products. Don't miss out!
+        Limited time deals on our premium health products. Dont miss out!
       </p>
 
       {/* Cards Container (Improved responsive layout) */}
@@ -43,8 +42,8 @@ export default function SpecialOffer({}: Props) {
         >
           <Card
             className="h-full rounded-2xl overflow-hidden shadow-lg border-2 border-transparent hover:border-blue-300 transition-all duration-300"
-            onMouseEnter={() => setHovered1(true)}
-            onMouseLeave={() => setHovered1(false)}
+            // onMouseEnter={() => setHovered1(true)}
+            // onMouseLeave={() => setHovered1(false)}
           >
             <CardContent className="p-0 h-full relative bg-gradient-to-br from-blue-50 to-sky-100">
               {/* Background decoration */}
@@ -99,8 +98,8 @@ export default function SpecialOffer({}: Props) {
         >
           <Card
             className="h-full rounded-2xl overflow-hidden shadow-lg border-2 border-transparent hover:border-amber-300 transition-all duration-300"
-            onMouseEnter={() => setHovered2(true)}
-            onMouseLeave={() => setHovered2(false)}
+            // onMouseEnter={() => setHovered2(true)}
+            // onMouseLeave={() => setHovered2(false)}
           >
             <CardContent className="p-0 h-full relative bg-gradient-to-br from-amber-50 to-amber-100">
               {/* Background decoration */}

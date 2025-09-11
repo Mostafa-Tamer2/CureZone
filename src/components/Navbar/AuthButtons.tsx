@@ -16,7 +16,12 @@ export default function AuthButtons() {
       setIsSigningOut(true);
       await signOut();
       toast.success("Signed out successfully");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Sign-out error:", error.message);
+      } else {
+        console.error("Sign-out error:", error);
+      }
       toast.error("Error signing out");
     } finally {
       setIsSigningOut(false);
