@@ -36,7 +36,7 @@ export default function OrderDetailsPage({
   const [order, setOrder] = useState<Order | null>(null);
   const [loadingOrder, setLoadingOrder] = useState(true);
 
-  const orderId = parseInt(params.id);
+  const orderId = parseInt(params.id, 10);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -55,7 +55,6 @@ export default function OrderDetailsPage({
           if (orderData) {
             setOrder(orderData);
           } else {
-            // Order not found or doesn't belong to user
             toast.error("Order not found");
             router.push("/orders");
           }
@@ -283,7 +282,6 @@ export default function OrderDetailsPage({
 
           {/* Order Summary */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Price Summary */}
             <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 sticky top-8">
               <h2 className="text-xl font-bold text-gray-800 mb-6">
                 Order Summary
@@ -354,7 +352,7 @@ export default function OrderDetailsPage({
                 )}
               </div>
 
-              {/* Cancel button for pending orders */}
+              {/* Cancel button */}
               {order.status === "pending" && (
                 <div className="mt-6">
                   <Button
