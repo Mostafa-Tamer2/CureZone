@@ -3,11 +3,24 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Send } from "lucide-react";
 
+type ChatRole = "user" | "model";
+interface ChatMessage {
+  role: ChatRole;
+  text: string;
+  timestamp: string;
+}
+
+interface ChatInputFormProps {
+  setChatHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  chatHistory: ChatMessage[];
+  BotResponse: (messages: ChatMessage[]) => void | Promise<void>;
+}
+
 export default function ChatInputForm({
   setChatHistory,
   chatHistory,
   BotResponse,
-}) {
+}: ChatInputFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,7 +29,9 @@ export default function ChatInputForm({
     if (!userMessage) return;
 
     // Clear input after submitting
-    inputRef.current.value = "";
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
 
     // Add user message with current time
     const timestamp = new Date().toLocaleTimeString([], {
