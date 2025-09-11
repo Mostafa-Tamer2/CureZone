@@ -125,25 +125,69 @@ const CheckoutPage = () => {
 
             // If we have previous order data with shipping details, use it
             if (orderData && orderData.shipping_details) {
-              const savedAddress = orderData.shipping_details;
+              const savedAddress =
+                orderData.shipping_details as Partial<ShippingDetails>;
               setShippingDetails((prev) => ({
                 ...prev,
-                fullName: data.full_name || prev.fullName,
-                email: data.email || prev.email,
-                phone: data.phone || prev.phone,
-                address: savedAddress.address || data.address || prev.address,
-                city: savedAddress.city || prev.city,
-                state: savedAddress.state || prev.state,
-                zipCode: savedAddress.zipCode || prev.zipCode,
+                fullName:
+                  typeof data.full_name === "string" && data.full_name.trim()
+                    ? data.full_name
+                    : prev.fullName,
+                email:
+                  typeof data.email === "string" && data.email.trim()
+                    ? data.email
+                    : prev.email,
+                phone:
+                  typeof data.phone === "string" && data.phone.trim()
+                    ? data.phone
+                    : prev.phone,
+                address:
+                  savedAddress &&
+                  typeof savedAddress.address === "string" &&
+                  savedAddress.address.trim()
+                    ? savedAddress.address
+                    : typeof data.address === "string" && data.address.trim()
+                    ? data.address
+                    : prev.address,
+                city:
+                  savedAddress &&
+                  typeof savedAddress.city === "string" &&
+                  savedAddress.city.trim()
+                    ? savedAddress.city
+                    : prev.city,
+                state:
+                  savedAddress &&
+                  typeof savedAddress.state === "string" &&
+                  savedAddress.state.trim()
+                    ? savedAddress.state
+                    : prev.state,
+                zipCode:
+                  savedAddress &&
+                  typeof savedAddress.zipCode === "string" &&
+                  savedAddress.zipCode.trim()
+                    ? savedAddress.zipCode
+                    : prev.zipCode,
               }));
             } else {
               // Otherwise just use the user profile data
               setShippingDetails((prev) => ({
                 ...prev,
-                fullName: data.full_name || prev.fullName,
-                email: data.email || prev.email,
-                phone: data.phone || prev.phone,
-                address: data.address || prev.address,
+                fullName:
+                  typeof data.full_name === "string" && data.full_name.trim()
+                    ? data.full_name
+                    : prev.fullName,
+                email:
+                  typeof data.email === "string" && data.email.trim()
+                    ? data.email
+                    : prev.email,
+                phone:
+                  typeof data.phone === "string" && data.phone.trim()
+                    ? data.phone
+                    : prev.phone,
+                address:
+                  typeof data.address === "string" && data.address.trim()
+                    ? data.address
+                    : prev.address,
               }));
             }
           }
@@ -153,8 +197,15 @@ const CheckoutPage = () => {
           if (user.user_metadata) {
             setShippingDetails((prev) => ({
               ...prev,
-              fullName: user.user_metadata.full_name || prev.fullName,
-              email: user.email || prev.email,
+              fullName:
+                typeof user.user_metadata.full_name === "string" &&
+                user.user_metadata.full_name.trim()
+                  ? user.user_metadata.full_name
+                  : prev.fullName,
+              email:
+                typeof user.email === "string" && user.email.trim()
+                  ? user.email
+                  : prev.email,
             }));
           }
         }
