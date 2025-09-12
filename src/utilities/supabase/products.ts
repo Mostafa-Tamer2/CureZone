@@ -71,11 +71,18 @@ export async function getProductsByCategory(
       return [];
     }
 
+    type CategoryIdRow = { id: number };
+    const [categoryRow] = (categoryData as unknown as CategoryIdRow[]) ?? [];
+    if (!categoryRow) {
+      console.error("Category not found after parsing:", categoryName);
+      return [];
+    }
+
     // Then get products with that category ID
     const { data, error } = await supabase
       .from("products")
       .select("*, categories(*)")
-      .eq("category_id", categoryData[0].id);
+      .eq("category_id", categoryRow.id);
 
     if (error) {
       console.error("Error fetching products by category:", error);
@@ -221,11 +228,18 @@ export async function getProductsByCategoryAndStatus(
       ? productTypeItem.value
       : status.toLowerCase();
 
+    type CategoryIdRow = { id: number };
+    const [categoryRow] = (categoryData as unknown as CategoryIdRow[]) ?? [];
+    if (!categoryRow) {
+      console.error("Category not found after parsing:", categoryName);
+      return [];
+    }
+
     // Then get products with that category ID and status
     const { data, error } = await supabase
       .from("products")
       .select("*, categories(*)")
-      .eq("category_id", categoryData[0].id)
+      .eq("category_id", categoryRow.id)
       .eq("status", statusValue);
 
     if (error) {

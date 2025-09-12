@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import type { Product } from "@/types/product";
+import type { Product, Category } from "@/types/product";
 
 // Simple event system for wishlist changes
 type WishlistEventType = "added" | "removed";
@@ -176,7 +176,10 @@ export async function getWishlistItems(): Promise<Product[]> {
       }
 
       // Make a second query to get all product details including categories
-      const productIds = data.map((item) => item.product_id);
+      type WishlistRow = { product_id: number };
+      const wishlistRows: WishlistRow[] = (data ??
+        []) as unknown as WishlistRow[];
+      const productIds: number[] = wishlistRows.map((item) => item.product_id);
 
       const { data: productsWithCategories, error: productsError } =
         await supabase
@@ -195,7 +198,10 @@ export async function getWishlistItems(): Promise<Product[]> {
       );
 
       // Map the products to our expected format
-      const products = productsWithCategories.map((product) => ({
+      type ProductRow = Product & { categories: Category };
+      const productRows: ProductRow[] = (productsWithCategories ??
+        []) as unknown as ProductRow[];
+      const products: Product[] = productRows.map((product) => ({
         id: product.id,
         name: product.name,
         image_url: product.image_url,
@@ -203,7 +209,7 @@ export async function getWishlistItems(): Promise<Product[]> {
         price: product.price,
         stock_quantity: product.stock_quantity,
         status: product.status,
-        discount_percent: product.discount_percent,
+        discount_percent: product.discount_percent ?? 0,
         category_id: product.category_id,
         category: product.categories,
       }));
@@ -230,7 +236,9 @@ export async function getWishlistItems(): Promise<Product[]> {
       }
 
       // Map the products to our expected format
-      return products.map((product) => ({
+      type ProductRow = Product & { categories: Category };
+      const rows: ProductRow[] = (products ?? []) as unknown as ProductRow[];
+      return rows.map((product) => ({
         id: product.id,
         name: product.name,
         image_url: product.image_url,
@@ -238,7 +246,7 @@ export async function getWishlistItems(): Promise<Product[]> {
         price: product.price,
         stock_quantity: product.stock_quantity,
         status: product.status,
-        discount_percent: product.discount_percent,
+        discount_percent: product.discount_percent ?? 0,
         category_id: product.category_id,
         category: product.categories,
       }));
@@ -341,7 +349,12 @@ export async function migrateGuestWishlist(): Promise<void> {
     return;
   }
 
-  const existingProductIds = existingItems.map((item) => item.product_id);
+  type WishlistRow = { product_id: number };
+  const existingWishlistRows: WishlistRow[] = (existingItems ??
+    []) as unknown as WishlistRow[];
+  const existingProductIds: number[] = existingWishlistRows.map(
+    (item) => item.product_id
+  );
 
   // Filter out products that are already in the user's wishlist
   const newProductIds = guestWishlist.filter(
