@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import type { Product } from "@/types/product";
+import type { Product, Category } from "@/types/product";
 
 // Define types for orders
 export interface OrderItem {
@@ -115,7 +115,9 @@ export async function getOrderDetails(orderId: number): Promise<Order | null> {
         console.error("Error fetching products for order:", productsError);
       } else if (products) {
         // Add product details to each order item
-        const prodRows: Product[] = (products as unknown as Product[]) ?? [];
+        type ProductRow = Product & { categories?: Category };
+        const prodRows: ProductRow[] =
+          (products as unknown as ProductRow[]) ?? [];
         const itemsWithProducts = orderItems.map((item) => {
           const product = prodRows.find((p) => p.id === item.product_id);
           return {
