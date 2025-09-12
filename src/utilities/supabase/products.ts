@@ -16,18 +16,35 @@ export async function getAllProducts(): Promise<Product[]> {
   }
 
   // Transform the data to match our Product type
-  return data.map((item) => ({
-    id: item.id,
-    name: item.name,
-    image_url: item.image_url,
-    description: item.description,
-    price: item.price,
-    stock_quantity: item.stock_quantity,
-    status: item.status,
-    discount_percent: item.discount_percent,
-    category_id: item.category_id,
-    category: item.categories,
-  }));
+  type ProductRow = {
+    id: number;
+    name: string;
+    image_url: string;
+    description: string;
+    price: number;
+    stock_quantity: number;
+    status: string;
+    discount_percent: number | null;
+    category_id: number;
+    categories: Category;
+  };
+
+  const rawRows: unknown[] = Array.isArray(data) ? (data as unknown[]) : [];
+  return rawRows.map((raw) => {
+    const item = raw as ProductRow;
+    return {
+      id: item.id,
+      name: item.name,
+      image_url: item.image_url,
+      description: item.description,
+      price: item.price,
+      stock_quantity: item.stock_quantity,
+      status: item.status,
+      discount_percent: item.discount_percent ?? 0,
+      category_id: item.category_id,
+      category: item.categories,
+    };
+  });
 }
 
 /**
@@ -66,18 +83,37 @@ export async function getProductsByCategory(
     }
 
     // Transform the data to match the Product type
-    return data.map((item) => ({
-      id: item.id,
-      name: item.name,
-      image_url: item.image_url,
-      description: item.description,
-      price: item.price,
-      stock_quantity: item.stock_quantity,
-      status: item.status,
-      discount_percent: item.discount_percent,
-      category_id: item.category_id,
-      category: item.categories,
-    }));
+    type ProductRow = {
+      id: number;
+      name: string;
+      image_url: string;
+      description: string;
+      price: number;
+      stock_quantity: number;
+      status: string;
+      discount_percent: number | null;
+      category_id: number;
+      categories: Category;
+    };
+    const rows: ProductRow[] = Array.isArray(data)
+      ? (data as unknown as ProductRow[])
+      : [];
+    return rows.map((row) => {
+      const item = row as ProductRow;
+      const result: Product = {
+        id: item.id,
+        name: item.name,
+        image_url: item.image_url,
+        description: item.description,
+        price: item.price,
+        stock_quantity: item.stock_quantity,
+        status: item.status,
+        discount_percent: item.discount_percent ?? 0,
+        category_id: item.category_id,
+        category: item.categories,
+      };
+      return result;
+    });
   } catch (error) {
     console.error("Unexpected error in getProductsByCategory:", error);
     return [];
@@ -108,7 +144,20 @@ export async function getProductsByStatus(status: string): Promise<Product[]> {
   }
 
   // Transform the data to match our Product type
-  return data.map((item) => ({
+  type ProductRow = {
+    id: number;
+    name: string;
+    image_url: string;
+    description: string;
+    price: number;
+    stock_quantity: number;
+    status: string;
+    discount_percent: number | null;
+    category_id: number;
+    categories: Category;
+  };
+  const rows: ProductRow[] = (data ?? []) as unknown as ProductRow[];
+  return rows.map((item) => ({
     id: item.id,
     name: item.name,
     image_url: item.image_url,
@@ -116,7 +165,7 @@ export async function getProductsByStatus(status: string): Promise<Product[]> {
     price: item.price,
     stock_quantity: item.stock_quantity,
     status: item.status,
-    discount_percent: item.discount_percent,
+    discount_percent: item.discount_percent ?? 0,
     category_id: item.category_id,
     category: item.categories,
   }));
@@ -133,7 +182,8 @@ export async function getAllCategories(): Promise<Category[]> {
     return [];
   }
 
-  return data;
+  type CategoryRow = { id: number; name: string; description: string };
+  return data as unknown as CategoryRow[] as unknown as Category[];
 }
 
 /**
@@ -184,7 +234,20 @@ export async function getProductsByCategoryAndStatus(
     }
 
     // Transform the data to match our Product type
-    return data.map((item) => ({
+    type ProductRow = {
+      id: number;
+      name: string;
+      image_url: string;
+      description: string;
+      price: number;
+      stock_quantity: number;
+      status: string;
+      discount_percent: number | null;
+      category_id: number;
+      categories: Category;
+    };
+    const rows: ProductRow[] = (data ?? []) as unknown as ProductRow[];
+    return rows.map((item) => ({
       id: item.id,
       name: item.name,
       image_url: item.image_url,
@@ -192,7 +255,7 @@ export async function getProductsByCategoryAndStatus(
       price: item.price,
       stock_quantity: item.stock_quantity,
       status: item.status,
-      discount_percent: item.discount_percent,
+      discount_percent: item.discount_percent ?? 0,
       category_id: item.category_id,
       category: item.categories,
     }));
@@ -218,17 +281,30 @@ export async function getProductById(id: number): Promise<Product | null> {
   }
 
   // Transform the data to match our Product type
+  type ProductRow = {
+    id: number;
+    name: string;
+    image_url: string;
+    description: string;
+    price: number;
+    stock_quantity: number;
+    status: string;
+    discount_percent: number | null;
+    category_id: number;
+    categories: Category;
+  };
+  const row: ProductRow = data as unknown as ProductRow;
   return {
-    id: data.id,
-    name: data.name,
-    image_url: data.image_url,
-    description: data.description,
-    price: data.price,
-    stock_quantity: data.stock_quantity,
-    status: data.status,
-    discount_percent: data.discount_percent,
-    category_id: data.category_id,
-    category: data.categories,
+    id: row.id,
+    name: row.name,
+    image_url: row.image_url,
+    description: row.description,
+    price: row.price,
+    stock_quantity: row.stock_quantity,
+    status: row.status,
+    discount_percent: row.discount_percent ?? 0,
+    category_id: row.category_id,
+    category: row.categories,
   };
 }
 
@@ -248,7 +324,20 @@ export async function searchProducts(query: string): Promise<Product[]> {
   }
 
   // Transform the data to match our Product type
-  return data.map((item) => ({
+  type ProductRow = {
+    id: number;
+    name: string;
+    image_url: string;
+    description: string;
+    price: number;
+    stock_quantity: number;
+    status: string;
+    discount_percent: number | null;
+    category_id: number;
+    categories: Category;
+  };
+  const rows: ProductRow[] = (data ?? []) as unknown as ProductRow[];
+  return rows.map((item) => ({
     id: item.id,
     name: item.name,
     image_url: item.image_url,
@@ -256,7 +345,7 @@ export async function searchProducts(query: string): Promise<Product[]> {
     price: item.price,
     stock_quantity: item.stock_quantity,
     status: item.status,
-    discount_percent: item.discount_percent,
+    discount_percent: item.discount_percent ?? 0,
     category_id: item.category_id,
     category: item.categories,
   }));

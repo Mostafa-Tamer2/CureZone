@@ -115,7 +115,7 @@ export async function getOrderDetails(orderId: number): Promise<Order | null> {
         console.error("Error fetching products for order:", productsError);
       } else if (products) {
         // Add product details to each order item
-        const prodRows: any[] = (products as unknown as any[]) ?? [];
+        const prodRows: Product[] = (products as unknown as Product[]) ?? [];
         const itemsWithProducts = orderItems.map((item) => {
           const product = prodRows.find((p) => p.id === item.product_id);
           return {
