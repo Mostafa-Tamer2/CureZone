@@ -1,12 +1,12 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { searchProducts } from "@/utilities/supabase/products";
 import type { Product } from "@/types/product";
 import ProductCard from "@/components/ProductGrid/ProductCard";
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [results, setResults] = useState<Product[]>([]);
@@ -57,5 +57,21 @@ export default function SearchPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto py-8 px-4">
+          <div className="flex justify-center items-center h-40">
+            <p className="text-gray-500">Loading search...</p>
+          </div>
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }
