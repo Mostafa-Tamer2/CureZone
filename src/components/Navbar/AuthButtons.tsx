@@ -84,7 +84,7 @@ export default function AuthButtons() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <Link href="/signin">
         <Button variant="outline" size="sm">
           Sign In

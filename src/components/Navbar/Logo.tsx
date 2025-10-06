@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Logo() {
   return (
-    <Link href="/" className="relative h-24 w-[200px]">
+    <Link href="/" className="relative h-24 w-[180px]">
       <img
         className="absolute w-[234px] h-[179px] top-[-41px] -left-9"
         alt="Propharm Logo"

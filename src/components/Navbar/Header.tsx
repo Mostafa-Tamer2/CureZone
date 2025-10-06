@@ -17,12 +17,12 @@ export default function Header({}: Props) {
     <header className="bg-white/70 py-5 sticky top-0 z-50  backdrop-blur-md">
       {/* <TopBar /> */}
       <Container className="flex items-center justify-between text-lightColor">
-        <div className="w-auto md:w-1/3 flex items-center gap-2.5 justify-start md:gap-0">
+        <div className="w-auto md:max-w-1/2  flex items-center gap-2.5 justify-start md:gap-0 ">
           <MobileMenu />
           <Logo />
         </div>
         <NavMenu />
-        <div className="w-auto md:w-1/3 flex items-center justify-end gap-5">
+        <div className=" md:w-1/5 flex items-center justify-end gap-2">
           <Wishlist />
           <CartIcon />
           <AuthButtons />
