@@ -6,7 +6,6 @@ import { AuthProvider } from "@/lib/auth-context";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { CartProvider } from "@/lib/cart-context";
 import { ToastProvider } from "@/components/ui/toast-provider";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 //Meta Data Configurations
 export const metadata: Metadata = {
   title: "CureZone",
